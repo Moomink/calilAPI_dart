@@ -1,22 +1,21 @@
 import 'library.dart';
-import 
-
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 final String apiDomain = "api.calil.jp";
 
 class Calil {
   final String _appkey;
-  Calil(String appkey) : this._appkey = appkey;
+  Calil(String appkey) : _appkey = appkey;
 
   // 図書館データベース
-  Future<CalilLibrary> library(
+  Future<List<CalilLibrary>> library(
       {String pref = "",
       String city = "",
       String systemid = "",
       String geocode = "",
-      int limit = 5}) {
-
-      final String path = '/library';
+      int limit = 5}) async {
+    final String path = '/library';
 
     Map<String, dynamic> query = {
       "appkey": _appkey,
@@ -24,11 +23,35 @@ class Calil {
       "city": city,
       "systemid": systemid,
       "geocode": geocode,
-      "limit": limit
+      "limit": limit,
+      "format": "json",
+      "callback": "no"
     };
 
-    var uri = Uri.https(apiDomain,path,query);
+    final Uri uri = Uri.https(apiDomain, path, query);
 
+    var client = http.Client();
 
+    List<CalilLibrary> library = [];
+    List<Map<String, dynamic>> getData = [];
+
+    try {
+      http.Response res;
+      res = await client.get(uri);
+
+      getData = jsonDecode(res.body);
+    } catch (e) {
+    } finally {
+      client.close();
+
+      if (getData.isEmpty) {
+      } else {
+        for (var value in getData) {
+          library.add(CalilLibrary.fromJson(value));
+        }
+      }
+    }
+
+    return library;
   }
 }
