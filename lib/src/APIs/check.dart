@@ -1,7 +1,7 @@
 class CalilCheck {
   final String status;
   final Uri reserveurl;
-  final String libkey;
+  final Map<String, String> libkey;
 
   CalilCheck(
       {required this.status, required this.reserveurl, required this.libkey});
@@ -10,7 +10,7 @@ class CalilCheck {
     CalilCheck checkData;
     checkData = CalilCheck(
         status: json["status"],
-        reserveurl: json["reserveurl"],
+        reserveurl: Uri.parse(json["reserveurl"]),
         libkey: json["libkey"]);
 
     return checkData;

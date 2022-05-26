@@ -60,8 +60,8 @@ class Calil {
     return library;
   }
 
-  Future<Map<String, List<CalilCheck>>> check(
-      List<String> isbn, List<String> systemid) async {
+  Future<Map<String, Map<String, CalilCheck>>> check(
+      {required List<String> isbn, required List<String> systemid}) async {
     const String path = '/check';
 
     Map<String, dynamic> query = {
@@ -72,7 +72,7 @@ class Calil {
       "callback": "no"
     };
 
-    Map<String, List<CalilCheck>> check = {};
+    Map<String, Map<String, CalilCheck>> check = {};
 
     Uri uri = Uri.https(apiDomain, path, query);
 
@@ -82,7 +82,7 @@ class Calil {
       http.Response res;
       while (true) {
         res = await client.get(uri);
-        if (jsonDecode(res.body)["continue"] == "1") {
+        if (jsonDecode(res.body)["continue"] == 1) {
           query = {
             "format": "json",
             "callback": "no",
@@ -97,25 +97,25 @@ class Calil {
       } //TODO check
 
       data = jsonDecode(res.body);
-      // add library list
-      data["books"].forEach((id, libs) {
-        List<CalilCheck> librarys = [];
-        CalilCheck library;
-        libs.forEach((lib, values) {
-          library = CalilCheck(
-              status: values["status"],
-              reserveurl: values["reserveurl"],
-              libkey: values["libkey"]);
-          librarys.add(library);
-        });
-        check.addAll({id: librarys});
-      });
     } catch (e) {
       throw Exception(e);
     } finally {
       client.close();
     }
+    // add library list
+    data["books"].forEach((_isbn, libs) {
+      Map<String, CalilCheck> data = {};
+      CalilCheck library;
 
+      libs.forEach((libName, values) {
+        library = CalilCheck(
+            status: values["status"],
+            reserveurl: Uri.parse(values["reserveurl"]),
+            libkey: Map<String, String>.from(values["libkey"]));
+        data.addAll({libName: library});
+      });
+      check.addAll({_isbn: data});
+    });
     return check;
   }
 }
