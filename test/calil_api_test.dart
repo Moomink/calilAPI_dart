@@ -35,16 +35,16 @@ void main() {
       expect(res.containsKey("4062091542"), isTrue);
       expect(res["4062091542"]!["Univ_Seiwa"]!.libkey["図書館"], "貸出可");
       expect(
-          res["4062091542"]!["Univ_Seiwa"]!.reserveurl,
+          res["4062091542"]!["Univ_Kisaraze_Ct"]!.reserveurl,
           Uri(
               scheme: 'https',
               host: 'libopac3-c.nagaokaut.ac.jp',
               path: '/opac/opac_details/',
               queryParameters: {
-                'lang': 0,
-                'amode': 11,
-                'bibid': 1013026374,
-                'kscode': 015
+                'lang': '0',
+                'amode': '11',
+                'bibid': '1013026374',
+                'kscode': '015'
               }));
     });
   });
