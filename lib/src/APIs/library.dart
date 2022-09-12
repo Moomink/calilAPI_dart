@@ -90,7 +90,8 @@ class CalilLibrary {
 }
 
 Future<List<CalilLibrary>> searchLibrary(
-    {String pref = "",
+    {required String appkey,
+    String pref = "",
     String city = "",
     String systemid = "",
     String geocode = "",
@@ -98,7 +99,7 @@ Future<List<CalilLibrary>> searchLibrary(
   const String path = '/library';
 
   Map<String, dynamic> query = {
-    //"appkey": _appkey,
+    "appkey": appkey,
     "pref": pref,
     "city": city,
     "systemid": systemid,

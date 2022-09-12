@@ -1,10 +1,11 @@
 import 'package:calil_api/calil_api.dart';
 
 void main() async {
-  var calil = Calil("<Calil Api Key>");
+  var key = "<<CALIL API KEY>>";
+  var libraryList =
+      await searchLibrary(appkey: key, systemid: "Univ_Kisaraze_Ct");
 
-  List<CalilLibrary> library =
-      await calil.library(systemid: "Univ_Kisaraze_Ct");
-
-  print("lbrary Name: ${library[0].systemname}");
+  libraryList.forEach((v) {
+    print(v.systemname);
+  });
 }

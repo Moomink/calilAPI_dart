@@ -1,3 +1,5 @@
+
+
 ## 0.3.5
 Some Fix
 - check class's parameter changed type from String to Uri
@@ -11,3 +13,7 @@ Some Fix
 
 - Initial version.
 
+
+## 2.0.0
+Calil API can run without Instance.
+ - Currently, only library search is supported.
